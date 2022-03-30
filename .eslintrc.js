@@ -1,22 +1,28 @@
 module.exports = {
   env: {
-    browser: false,
+    browser: true,
     es2021: true,
-    mocha: true,
-    node: true,
   },
   extends: [
-    "standard",
-    "plugin:prettier/recommended",
-    "plugin:node/recommended",
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'standard',
   ],
   parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
     ecmaVersion: 12,
+    sourceType: 'module',
   },
   overrides: [
     {
       files: ["hardhat.config.js"],
       globals: { task: true },
     },
+  plugins: [
+    'react',
   ],
+  rules: {
+  },
 };

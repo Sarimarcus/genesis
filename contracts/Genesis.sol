@@ -6,12 +6,14 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract MyToken is ERC721, ERC721URIStorage, Ownable {
+contract Genesis is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("MyToken", "MTK") {}
+    mapping(string => uint8) existingURIs;
+
+    constructor() ERC721("Genesis", "GEN") {}
 
     function _baseURI() internal pure override returns (string memory) {
         return "ipfs://";
@@ -22,6 +24,24 @@ contract MyToken is ERC721, ERC721URIStorage, Ownable {
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
+    }
+
+    function isContentOwned(string memory uri) public view returns (bool) {
+        return existingURIs[uri] == 1;
+    }
+
+    function payToMint(address recipient, string memory metadataURI) public payable returns (uint256) {
+        require(existingURIs[metadataURI] != 1, 'NFT already minted!');
+        require (msg.value >= 0.01 ether, 'Need to pay up!');
+
+        uint256 newItemId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        existingURIs[metadataURI] = 1;
+
+        _mint(recipient, newItemId);
+        _setTokenURI(newItemId, metadataURI);
+
+        return newItemId;
     }
 
     // The following functions are overrides required by Solidity.

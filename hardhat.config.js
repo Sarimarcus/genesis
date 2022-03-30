@@ -22,25 +22,24 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  defaultNetwork: "matic",
+  defaultNetwork: "localhost",
   solidity: "0.8.4",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
+  settings: {
+    optimizer: {
+      enabled: true,
+      runs: 200,
+    },
   },
   paths: {
-    artifacts: './src/artifacts',
+    artifacts: "./src/artifacts",
   },
   networks: {
-    hardhat: {
-    },
+    hardhat: {},
     matic: {
-      //url: `${process.env.MUMBAI_URL}`,
+      // url: `${process.env.MUMBAI_URL}`,
       url: `${process.env.MUMBAI_URL}`,
-      accounts: [process.env.PRIVATE_KEY]
-    }
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
